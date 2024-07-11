@@ -1,6 +1,6 @@
+import { Button } from '@/src/components/button';
 import { AtSign, Plus, X } from 'lucide-react';
 import { FormEvent } from 'react';
-import { Button } from './button';
 
 interface InviteGuestsModalProps {
   isOpen: boolean;
@@ -64,10 +64,7 @@ export const InviteGuestsModal = ({
                   name="email"
                   placeholder="Digite o e-mail do convidado"
                 />
-                <Button
-                  type="submit"
-                  className="bg-lime-300 text-lime-900 hover:bg-lime-400"
-                >
+                <Button type="submit">
                   Convidar
                   <Plus className="size-5 " />
                 </Button>

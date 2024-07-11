@@ -1,6 +1,6 @@
+import { Button } from '@/src/components/button';
 import { Mail, User, X } from 'lucide-react';
 import { FormEvent } from 'react';
-import { Button } from './button';
 
 interface ConfirmTripModalProps {
   isOpen: boolean;
@@ -61,7 +61,8 @@ export const ConfirmTripModal = ({
               </div>
               <Button
                 type="submit"
-                className="bg-lime-300 text-lime-900 hover:bg-lime-400 w-full justify-center h-11"
+                variant="primary"
+                className=" w-full justify-center h-11"
               >
                 Confirmar criação da viagem
               </Button>

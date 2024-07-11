@@ -1,5 +1,5 @@
+import { Button } from '@/src/components/button';
 import { ArrowRight, UserRoundPlus } from 'lucide-react';
-import { Button } from '../button';
 
 interface InviteGuestsStepProps {
   isGuestsInputOpen: boolean;
@@ -38,10 +38,7 @@ export const InviteGuestsStep = ({
 
           <div className="w-px h-6 bg-zinc-800" />
 
-          <Button
-            onClick={handleConfirmTripModal}
-            className="bg-lime-300 text-lime-900 hover:bg-lime-400"
-          >
+          <Button onClick={handleConfirmTripModal} variant="primary">
             Confirmar viagem
             <ArrowRight className="size-5 " />
           </Button>

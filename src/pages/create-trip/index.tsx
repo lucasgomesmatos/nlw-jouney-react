@@ -1,10 +1,11 @@
 import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ConfirmTripModal } from '../../components/confirm-trip-modal';
-import { Footer } from '../../components/footer';
-import { InviteGuestsModal } from '../../components/invite-guests-modal';
-import { DestinationAndDateStep } from '../../components/steps/destination-and-date-step';
-import { InviteGuestsStep } from '../../components/steps/invite-guests-step';
+
+import { ConfirmTripModal } from './components/confirm-trip-modal';
+import { Footer } from './components/footer';
+import { InviteGuestsModal } from './components/invite-guests-modal';
+import { DestinationAndDateStep } from './components/steps/destination-and-date-step';
+import { InviteGuestsStep } from './components/steps/invite-guests-step';
 
 export const CreateTripPage = () => {
   const navigate = useNavigate();
