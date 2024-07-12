@@ -1,28 +1,25 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { api } from '@/src/lib/axios';
 import { ConfirmTripModal } from './components/confirm-trip-modal';
 import { Footer } from './components/footer';
 import { InviteGuestsModal } from './components/invite-guests-modal';
 import { DestinationAndDateStep } from './components/steps/destination-and-date-step';
 import { InviteGuestsStep } from './components/steps/invite-guests-step';
+import { createTripStore } from './store/create-trip-store';
 
 export const CreateTripPage = () => {
   const navigate = useNavigate();
 
-  const [isGuestsInputOpen, setIsGuestsInputOpen] = useState(false);
-  const [isGuestsModalOpen, setIsGuestsModalOpen] = useState(false);
-  const [emailsToInvite, setEmailsToInvite] = useState<string[]>([
-    'lucasgomesmatosdev@gmail.com',
-  ]);
-  const [isConfirmTripModalOpen, setIsConfirmTripModalOpen] = useState(false);
-
-  const toggleGuestInput = () => setIsGuestsInputOpen(!isGuestsInputOpen);
-
-  const toggleGuestModal = () => setIsGuestsModalOpen(!isGuestsModalOpen);
-
-  const handleConfirmTripModal = () =>
-    setIsConfirmTripModalOpen(!isConfirmTripModalOpen);
+  const {
+    addEmailToInvite,
+    emailsToInvite,
+    destination,
+    eventStartAndEndDates,
+    ownerName,
+    ownerEmail,
+  } = createTripStore();
 
   const addNewEmailToInvite = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -30,18 +27,38 @@ export const CreateTripPage = () => {
     const email = formData.get('email') as string;
 
     if (email && !emailsToInvite.includes(email)) {
-      setEmailsToInvite([...emailsToInvite, email]);
+      addEmailToInvite(email);
     }
 
     event.currentTarget.reset();
   };
 
-  const removeEmailToInvite = (email: string) =>
-    setEmailsToInvite(emailsToInvite.filter((item) => item !== email));
-
-  const createTip = (event: FormEvent<HTMLFormElement>) => {
+  const createTip = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    navigate('/trips/1');
+
+    if (
+      !destination ||
+      !eventStartAndEndDates?.from ||
+      !eventStartAndEndDates?.to ||
+      emailsToInvite.length === 0 ||
+      !ownerName ||
+      !ownerEmail
+    ) {
+      return;
+    }
+
+    const response = await api.post('/trips', {
+      destination,
+      starts_at: eventStartAndEndDates?.from,
+      ends_at: eventStartAndEndDates?.to,
+      emails_to_invite: emailsToInvite,
+      owner_name: ownerName,
+      owner_email: ownerEmail,
+    });
+
+    const { tripId } = response.data;
+
+    navigate(`/trips/${tripId}`);
   };
 
   return (
@@ -54,32 +71,13 @@ export const CreateTripPage = () => {
           </p>
         </div>
         <div className="space-y-4">
-          <DestinationAndDateStep
-            isGuestsInputOpen={isGuestsInputOpen}
-            toggleGuestInput={toggleGuestInput}
-          />
-          <InviteGuestsStep
-            isGuestsInputOpen={isGuestsInputOpen}
-            emailsToInvite={emailsToInvite}
-            toggleGuestModal={toggleGuestModal}
-            handleConfirmTripModal={handleConfirmTripModal}
-          />
+          <DestinationAndDateStep />
+          <InviteGuestsStep />
         </div>
         <Footer />
       </div>
-      <InviteGuestsModal
-        isOpen={isGuestsModalOpen}
-        addNewEmailToInvite={addNewEmailToInvite}
-        toggleModal={toggleGuestModal}
-        emailsToInvite={emailsToInvite}
-        removeEmailToInvite={removeEmailToInvite}
-      />
-
-      <ConfirmTripModal
-        isOpen={isConfirmTripModalOpen}
-        toggleModal={handleConfirmTripModal}
-        createTrip={createTip}
-      />
+      <InviteGuestsModal addNewEmailToInvite={addNewEmailToInvite} />
+      <ConfirmTripModal createTrip={createTip} />
     </div>
   );
 };

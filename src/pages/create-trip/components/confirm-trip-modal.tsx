@@ -1,21 +1,25 @@
 import { Button } from '@/src/components/button';
 import { Mail, User, X } from 'lucide-react';
 import { FormEvent } from 'react';
+import { createTripStore } from '../store/create-trip-store';
 
 interface ConfirmTripModalProps {
-  isOpen: boolean;
-  toggleModal: () => void;
   createTrip: (event: FormEvent<HTMLFormElement>) => void;
 }
 
-export const ConfirmTripModal = ({
-  isOpen,
-  toggleModal,
-  createTrip,
-}: ConfirmTripModalProps) => {
+export const ConfirmTripModal = ({ createTrip }: ConfirmTripModalProps) => {
+  const {
+    isConfirmTripModalOpen,
+    updateIsConfirmTripModalOpen,
+    ownerName,
+    addOwnerName,
+    ownerEmail,
+    addOwnerEmail,
+  } = createTripStore();
+
   return (
     <>
-      {isOpen && (
+      {isConfirmTripModalOpen && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center">
           <div className="w-[640px] rounded-lg py-5 px-6 shadow-shape bg-zinc-900 space-y-5">
             <div className="space-y-2">
@@ -24,7 +28,10 @@ export const ConfirmTripModal = ({
                   Confirmar criação da viagem
                 </h2>
                 <button type="button">
-                  <X className="size-5 text-zinc-400" onClick={toggleModal} />
+                  <X
+                    className="size-5 text-zinc-400"
+                    onClick={updateIsConfirmTripModalOpen}
+                  />
                 </button>
               </div>
               <p className="text-sm text-zinc-400">
@@ -48,6 +55,8 @@ export const ConfirmTripModal = ({
                   type="text"
                   name="name"
                   placeholder="Seu nome completo"
+                  value={ownerName}
+                  onChange={(event) => addOwnerName(event.target.value)}
                 />
               </div>
               <div className="flex gap-2 items-center h-14 px-4 bg-zinc-950 border border-zinc-800 rounded-lg">
@@ -57,6 +66,8 @@ export const ConfirmTripModal = ({
                   type="email"
                   name="email"
                   placeholder="Seu email pessoal"
+                  value={ownerEmail}
+                  onChange={(event) => addOwnerEmail(event.target.value)}
                 />
               </div>
               <Button

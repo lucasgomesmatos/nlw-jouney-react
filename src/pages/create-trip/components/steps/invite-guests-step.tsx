@@ -1,27 +1,22 @@
 import { Button } from '@/src/components/button';
 import { ArrowRight, UserRoundPlus } from 'lucide-react';
+import { createTripStore } from '../../store/create-trip-store';
 
-interface InviteGuestsStepProps {
-  isGuestsInputOpen: boolean;
-  toggleGuestModal: () => void;
-  emailsToInvite: string[];
-  handleConfirmTripModal: () => void;
-}
+export const InviteGuestsStep = () => {
+  const {
+    isGuestsInputOpen,
+    updateIsGuestsModalOpen,
+    emailsToInvite,
+    updateIsConfirmTripModalOpen,
+  } = createTripStore();
 
-export const InviteGuestsStep = ({
-  isGuestsInputOpen,
-  toggleGuestModal,
-  emailsToInvite,
-  handleConfirmTripModal,
-}: InviteGuestsStepProps) => {
   return (
     <>
-      {' '}
       {isGuestsInputOpen && (
         <div className="h-16 bg-zinc-900 px-4 rounded-xl flex items-center shadow-shape gap-3">
           <button
             type="button"
-            onClick={toggleGuestModal}
+            onClick={updateIsGuestsModalOpen}
             className="flex gap-2 items-center flex-1"
           >
             <UserRoundPlus className="size-5 text-zinc-400" />
@@ -38,7 +33,7 @@ export const InviteGuestsStep = ({
 
           <div className="w-px h-6 bg-zinc-800" />
 
-          <Button onClick={handleConfirmTripModal} variant="primary">
+          <Button onClick={updateIsConfirmTripModalOpen} variant="primary">
             Confirmar viagem
             <ArrowRight className="size-5 " />
           </Button>

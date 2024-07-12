@@ -1,32 +1,35 @@
 import { Button } from '@/src/components/button';
 import { AtSign, Plus, X } from 'lucide-react';
 import { FormEvent } from 'react';
+import { createTripStore } from '../store/create-trip-store';
 
 interface InviteGuestsModalProps {
-  isOpen: boolean;
-  toggleModal: () => void;
-  emailsToInvite: string[];
   addNewEmailToInvite: (event: FormEvent<HTMLFormElement>) => void;
-  removeEmailToInvite: (email: string) => void;
 }
 
 export const InviteGuestsModal = ({
-  isOpen,
-  toggleModal,
-  emailsToInvite,
   addNewEmailToInvite,
-  removeEmailToInvite,
 }: InviteGuestsModalProps) => {
+  const {
+    removeEmailToInvite,
+    isGuestsModalOpen,
+    updateIsGuestsModalOpen,
+    emailsToInvite,
+  } = createTripStore();
+
   return (
     <>
-      {isOpen && (
+      {isGuestsModalOpen && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center">
           <div className="w-[640px] rounded-lg py-5 px-6 shadow-shape bg-zinc-900 space-y-5">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-semibold">Selecionar convidados</h2>
                 <button type="button">
-                  <X className="size-5 text-zinc-400" onClick={toggleModal} />
+                  <X
+                    className="size-5 text-zinc-400"
+                    onClick={updateIsGuestsModalOpen}
+                  />
                 </button>
               </div>
               <p className="text-sm text-zinc-400">
