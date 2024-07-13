@@ -1,6 +1,8 @@
 import { Button } from '@/src/components/button';
+import { api } from '@/src/lib/axios';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Activities } from './components/activities';
 import { CreateActivityModal } from './components/create-activity-modal';
 import { DestinationAndDateHeader } from './components/destination-and-date-header';
@@ -8,6 +10,10 @@ import { Guests } from './components/guests';
 import { ImportantLinks } from './components/important-links';
 
 export const TripDetailsPage = () => {
+  const { tripId } = useParams();
+
+  api.get(`/trips/${tripId}`);
+
   const [isCreatingActivityModalOpen, setIsCreatingActivityModalOpen] =
     useState(false);
 

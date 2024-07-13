@@ -1,13 +1,17 @@
 import { Button } from '@/src/components/button';
-import { Mail, User, X } from 'lucide-react';
+import { Loader2, Mail, User, X } from 'lucide-react';
 import { FormEvent } from 'react';
 import { createTripStore } from '../store/create-trip-store';
 
 interface ConfirmTripModalProps {
   createTrip: (event: FormEvent<HTMLFormElement>) => void;
+  isLoading: boolean;
 }
 
-export const ConfirmTripModal = ({ createTrip }: ConfirmTripModalProps) => {
+export const ConfirmTripModal = ({
+  createTrip,
+  isLoading,
+}: ConfirmTripModalProps) => {
   const {
     isConfirmTripModalOpen,
     updateIsConfirmTripModalOpen,
@@ -27,7 +31,7 @@ export const ConfirmTripModal = ({ createTrip }: ConfirmTripModalProps) => {
                 <h2 className="text-lg font-semibold">
                   Confirmar criação da viagem
                 </h2>
-                <button type="button">
+                <button type="button" disabled={isLoading}>
                   <X
                     className="size-5 text-zinc-400"
                     onClick={updateIsConfirmTripModalOpen}
@@ -71,11 +75,16 @@ export const ConfirmTripModal = ({ createTrip }: ConfirmTripModalProps) => {
                 />
               </div>
               <Button
+                disabled={isLoading}
                 type="submit"
                 variant="primary"
                 className=" w-full justify-center h-11"
               >
-                Confirmar criação da viagem
+                {isLoading ? (
+                  <Loader2 className="size-5 animate-spin" />
+                ) : (
+                  <span>Confirmar criação da viagem</span>
+                )}
               </Button>
             </form>
           </div>

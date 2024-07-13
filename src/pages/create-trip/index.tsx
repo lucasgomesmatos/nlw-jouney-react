@@ -2,6 +2,7 @@ import { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { api } from '@/src/lib/axios';
+import { useMutation } from '@tanstack/react-query';
 import { ConfirmTripModal } from './components/confirm-trip-modal';
 import { Footer } from './components/footer';
 import { InviteGuestsModal } from './components/invite-guests-modal';
@@ -33,6 +34,19 @@ export const CreateTripPage = () => {
     event.currentTarget.reset();
   };
 
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: () => {
+      return api.post('/trips', {
+        destination,
+        starts_at: eventStartAndEndDates?.from,
+        ends_at: eventStartAndEndDates?.to,
+        emails_to_invite: emailsToInvite,
+        owner_name: ownerName,
+        owner_email: ownerEmail,
+      });
+    },
+  });
+
   const createTip = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -47,14 +61,7 @@ export const CreateTripPage = () => {
       return;
     }
 
-    const response = await api.post('/trips', {
-      destination,
-      starts_at: eventStartAndEndDates?.from,
-      ends_at: eventStartAndEndDates?.to,
-      emails_to_invite: emailsToInvite,
-      owner_name: ownerName,
-      owner_email: ownerEmail,
-    });
+    const response = await mutateAsync();
 
     const { tripId } = response.data;
 
@@ -77,7 +84,7 @@ export const CreateTripPage = () => {
         <Footer />
       </div>
       <InviteGuestsModal addNewEmailToInvite={addNewEmailToInvite} />
-      <ConfirmTripModal createTrip={createTip} />
+      <ConfirmTripModal createTrip={createTip} isLoading={isPending} />
     </div>
   );
 };
